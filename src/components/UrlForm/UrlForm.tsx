@@ -14,9 +14,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UrlFormSchema, UrlFormSchemaType } from "./urlFormSchema";
 import { createUrlAction } from "./createUrlAction";
+import { CopyText } from "../CopyText";
 
 const UrlForm = () => {
   const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState<boolean>(false);
   const form = useForm<UrlFormSchemaType>({
     resolver: zodResolver(UrlFormSchema),
     defaultValues: {
@@ -25,11 +27,14 @@ const UrlForm = () => {
   });
   const onSubmit = async (data: UrlFormSchemaType) => {
     const response = await createUrlAction(data);
-    console.log(response);
 
     if (response.type === "success") {
       setShortenedUrl(response.data.url);
+      setCopied(false);
     }
+  };
+  const onCopyText = () => {
+    setCopied(true);
   };
 
   return (
@@ -49,9 +54,14 @@ const UrlForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Shrink URL</Button>
+        <Button type="submit">{`"Chop" URL`}</Button>
         {shortenedUrl && (
-          <p className="text-base text-gray-800">{shortenedUrl}</p>
+          <CopyText
+            className="text-gray-800 text-base"
+            onClick={onCopyText}
+            copied={copied}
+            text={shortenedUrl}
+          />
         )}
       </form>
     </Form>
