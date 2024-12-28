@@ -7,7 +7,11 @@ import crypto from "crypto";
  * @returns A truncated hash string
  */
 function generateUniqueHash(input: string, length: number = 8): string {
-  const fullHash = crypto.createHash("sha256").update(input).digest("hex");
+  const inputWithTimestamp = `${input}-${Date.now().toString()}`;
+  const fullHash = crypto
+    .createHash("sha256")
+    .update(inputWithTimestamp)
+    .digest("hex");
 
   return fullHash.slice(0, length);
 }
