@@ -19,15 +19,17 @@ const CopyText = ({ className, text, copied, onClick }: CopyTextProps) => {
 
   return (
     <span
-      onClick={copyText}
       className={cn(
-        "cursor-pointer flex items-center justify-between bg-gray-200 p-2 rounded",
+        "flex items-center justify-between bg-gray-200 p-2 rounded",
         className
       )}
     >
       {text}
       <div className="inline-block ml-2 border border-gray-300 bg-white rounded p-2">
-        <span className="flex items-center gap-2">
+        <span
+          onClick={copyText}
+          className="flex cursor-pointer items-center gap-2"
+        >
           {copied ? (
             <>
               <FaCheck />
