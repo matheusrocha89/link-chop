@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { LuAxe } from "react-icons/lu";
+import { ImSpinner2 } from "react-icons/im";
 
 import {
   Form,
@@ -25,12 +27,14 @@ const UrlForm = () => {
       url: "",
     },
   });
+  const { isSubmitting } = form.formState;
   const onSubmit = async (data: UrlFormSchemaType) => {
     const response = await createUrlAction(data);
 
     if (response.type === "success") {
       setShortenedUrl(response.data.url);
       setCopied(false);
+      form.reset();
     }
   };
   const onCopyText = () => {
@@ -54,10 +58,22 @@ const UrlForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">{`"Chop" URL`}</Button>
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? (
+            <>
+              <ImSpinner2 className="animate-spin" />
+              {"Chopping..."}
+            </>
+          ) : (
+            <>
+              <LuAxe />
+              {`"Chop" URL`}
+            </>
+          )}
+        </Button>
         {shortenedUrl && (
           <CopyText
-            className="text-gray-800 text-base"
+            className="text-gray-800 text-base px-4"
             onClick={onCopyText}
             copied={copied}
             text={shortenedUrl}
